@@ -126,9 +126,6 @@ public class main {
     public static DFA toMinimalDfa(DFA dfa, ArrayList<Character> alphabet) {
         //unreachable stuff:
 
-        //let reachable_states := {q0};
-        //let new_states := {q0};
-
         HashSet<Integer> allStates = new HashSet<>();
         for(int x : dfa.DFATable.keySet()) allStates.add(x);
         HashSet<Integer> reachable_states = new HashSet<>();
@@ -137,20 +134,14 @@ public class main {
         HashSet<Integer> new_states = new HashSet<>();
         new_states.add(dfa.getStartingState());
 
-        //do
-        //   stuff
-        //while (new_states ≠ the empty set);
         do {
-            //temp := the empty set;
             HashSet<Integer> temp = new HashSet<>();
             //for each q in new_states do
             Iterator<Integer> it3 = new_states.iterator();
             while(it3.hasNext()) {
                 int q = it3.next();
-                //for each c in Σ do
                 for(Character c : alphabet) {
                     if(c == 'e') continue;
-                    //temp := temp ∪ {p such that p = δ(q,c)};
                     temp.add(dfa.DFATable.get(q).dfaMoves.get(c));
                 }
             }
@@ -205,7 +196,6 @@ public class main {
         int xxx = 0;
         while(!W.isEmpty()) {
             xxx++;
-            //     choose and remove a set A from W
             Iterator<HashSet<Integer>> it = W.iterator();
             HashSet<Integer> A = it.next();
             W.remove(A);
@@ -214,7 +204,6 @@ public class main {
 
             for(Character c : alphabet) {
                 if(c=='e') continue;
-                //      let X be the set of states for which a transition on c leads to a state in A
                 HashSet<Integer> X = new HashSet<>();
                 for(int currState : dfa.DFATable.keySet()) {
                     if(A.contains(dfa.DFATable.get(currState).dfaMoves.get(c))) {
@@ -226,8 +215,7 @@ public class main {
                 HashSet<HashSet<Integer>> removeFromP = new HashSet<>();
                 HashSet<HashSet<Integer>> addToP = new HashSet<>();
 
-                //      for each set Y in P for which
-                //      X ∩ Y is nonempty and Y \ X is nonempty do
+               
                 while(PIterator.hasNext()) {
                     HashSet<Integer> Y = PIterator.next();
 
@@ -243,26 +231,11 @@ public class main {
                     //System.out.println("yxDiff:"+yxDiff);
 
                     if((!xyIntersect.isEmpty()) && (!yxDiff.isEmpty())) {
-                        //        replace Y in P by the two sets X ∩ Y and Y \ X
-
-                        /*
-                        P.remove(y);
-                        System.out.println("removed");
-                        P.add(xyIntersect);
-                        */
+                        
                         removeFromP.add(Y);
                         addToP.add(xyIntersect);
                         addToP.add(yxDiff);
 
-                        /*
-                        if Y is in W
-                             replace Y in W by the same two sets
-                        else
-                             if |X ∩ Y| <= |Y \ X|
-                                  add X ∩ Y to W
-                             else
-                                  add Y \ X to W
-                        */
                         if(W.contains(Y)) {
                             W.remove(Y);
                             W.add(xyIntersect);
